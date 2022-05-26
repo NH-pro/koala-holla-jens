@@ -35,14 +35,16 @@ function getKoalas(){
     url: '/koalas'
   })
   .then(function(response) {
-    console.log('getting koalas from server');
+    console.log('getting koalas from server',response);
     for (item of response) {
       $('#viewKoalas').append(`
-        <tr>${item.name}</tr>
-        <tr>${item.age}</tr>
-        <tr>${item.gender}</tr>
-        <tr>${item.ready_to_transfer}</tr>
-        <tr>${item.notes}</tr>
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.age}</td>
+        <td>${item.gender}</td>
+        <td>${item.ready_to_transfer}</td>
+        <td>${item.notes}</td>
+       </tr> 
       `);
     }
   })
