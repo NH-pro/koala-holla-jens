@@ -20,7 +20,24 @@ koalaRouter.get('/', (req, res) => {
 });
 
 // POST
-
+koalaRouter.post('/', (req, res) => {
+  console.log(`IN THE POST ROUTE`, req.body)
+  const query = `
+  INSERT INTO "koalas" ("name", "gender", "age", "ready_to_transfer", "notes")
+  VALUES ($1, $2, $3, $4, $5);
+  `;
+  const sqlParams = [req.body.name, req.body.gender, req.body.age, req.body.ready_to_transfer, req.body.notes];
+  
+  pool.query(query, sqlParams)
+  .then(() => {
+    console.log(`POST went THROUGH`)
+    res.sendStatus(201);
+  })
+  .catch((error) => {
+    console.log(`ERROR in POST`, error)
+    res.sendStatus(500);
+  })
+});
 
 // PUT
 
