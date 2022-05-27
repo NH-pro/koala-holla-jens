@@ -43,7 +43,7 @@ koalaRouter.post('/', (req, res) => {
 
 
 // DELETE
-router.delete('/:koala', req,res) => {
+koalaRouter.delete('/:koala', req,res) => {
 let koalaId = req.params.item.id;
 console.log('in router.delete', koalaId);
 
