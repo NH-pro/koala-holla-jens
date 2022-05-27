@@ -58,7 +58,7 @@ function changeTransfer() {
   console.log(`Changing transfer status to:`, updateTransfer);
 
   $.ajax({
-    meothod: 'PUT',
+    method: 'PUT',
     url:`/koalas/${koalaId}`,
     data: updateTransfer
   })
