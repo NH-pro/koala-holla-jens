@@ -10,6 +10,9 @@ $( document ).ready( function(){
 }); // end doc ready
 
 function setupClickListeners() {
+  $('#viewKoalas').on('click', '#delete_btn', deleteKoala);
+  // delet koala listener
+
   $( '#addButton' ).on( 'click', function(){
     console.log( 'in addButton on click' );
     // get user input and put in an object
@@ -22,11 +25,31 @@ function setupClickListeners() {
       readyForTransfer: $('#readyForTransferIn').val(),
       notes: $('#notesIn').val(),
     };
+
     // call saveKoala with the new obejct
     saveKoala( koalaToSend );
     console.log('koala:',koalaToSend)
   }); 
 }
+
+function deleteKoala() {
+  console.log('--- In deleteKoala function! ---');
+
+  let koalaId = $(this).parents('tr').data('koala-id');
+
+  $.ajax({
+    method: 'DELETE',
+    url: `/koalas/${koalaId}`
+  })
+  .then(() => {
+    console.log(`Delete Success!`);
+
+    getKoalas(); // refresh the page with updated koala data
+  })
+  .catch((err) => {
+    console.log(`Delete Failed`, err);
+  });
+};
 
 function getKoalas(){
   console.log( 'in getKoalas' );
@@ -40,12 +63,15 @@ function getKoalas(){
     console.log('getting koalas from server',response);
     for (item of response) {
       $('#viewKoalas').append(`
-      <tr>
+      <tr data-koala-id= "${item.id}">
         <td>${item.name}</td>
         <td>${item.age}</td>
         <td>${item.gender}</td>
         <td>${item.ready_to_transfer}</td>
         <td>${item.notes}</td>
+        <td>
+          <button id="delete_btn">Delete</button>
+        </td>
        </tr> 
       `);
     }
