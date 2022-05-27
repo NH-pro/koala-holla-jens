@@ -13,6 +13,8 @@ function setupClickListeners() {
   $('#viewKoalas').on('click', '#delete_btn', deleteKoala);
   // delet koala listener
 
+  $('#viewKoalas').on('click', '#transfer_btn', changeTransfer)
+
   $( '#addButton' ).on( 'click', function(){
     console.log( 'in addButton on click' );
     // get user input and put in an object
@@ -30,6 +32,43 @@ function setupClickListeners() {
     saveKoala( koalaToSend );
     console.log('koala:',koalaToSend)
   }); 
+}
+
+function changeTransfer() {
+  console.log(`--- In changeTransfer fucntion! ---`);
+  
+  let koalaId = $(this).parents('tr').data('koala-id');
+
+  let updateTransfer;
+
+  if($(this).parents('tr').children('.transfer_status').text()=== 'N') {
+    updateTransfer = {
+      ready_to_transfer: 'Y'
+    };
+  }
+  else if($(this).parents('tr').children('.transfer_status').text()=== 'Y') {
+    updateTransfer = {
+      ready_to_transfer: 'N'
+    };
+  }
+  else {
+    console.log(`Something BIG WRONG in change transfer!`)
+  };
+
+  console.log(`Changing transfer status to:`, updateTransfer);
+
+  $.ajax({
+    meothod: 'PUT',
+    url:`/koalas/${koalaId}`,
+    data: updateTransfer
+  })
+  .then(res => {
+    console.log(`PUT transfer update Success!`);
+    getKoalas(); // refresh the page with updated koala data
+  })
+  .catch(err => {
+    console.log(`PUT transfer update Failed!`, err);
+  });
 }
 
 function deleteKoala() {
@@ -67,8 +106,11 @@ function getKoalas(){
         <td>${item.name}</td>
         <td>${item.age}</td>
         <td>${item.gender}</td>
-        <td>${item.ready_to_transfer}</td>
+        <td class="transfer_status">${item.ready_to_transfer}</td>
         <td>${item.notes}</td>
+        <td>
+          <button id="transfer_btn">Ready for Transfer</button>
+        </td>
         <td>
           <button id="delete_btn">Delete</button>
         </td>
